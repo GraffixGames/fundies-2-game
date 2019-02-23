@@ -7,7 +7,7 @@ use ggez::graphics::{self, Color};
 pub fn shoot_bullet(ctx: &mut Context, world: &mut pyro::World) {
     let screen_rect = graphics::screen_coordinates(ctx);
     let pos = Pos(Vec2::new(screen_rect.w / 2.0, screen_rect.bottom()));
-    let vel = Vel(Vec2::new(0.0, -300.0));
+    let vel = Vel(Vec2::new(0.0, -Bullet::SPEED));
     let mesh = graphics::Mesh::new_circle(
         ctx,
         graphics::DrawMode::Fill,
@@ -78,7 +78,7 @@ pub fn handle_collision(ctx: &mut Context, world: &mut pyro::World) -> u32 {
                             
                             let angle = i as f32 * (2.0 * f32::consts::PI / (to_spawn + 1) as f32);
 
-                            spawn.push((*bullet_pos, Vel(Vec2::from_angle(angle, 300.0)), b, mesh));
+                            spawn.push((*bullet_pos, Vel(Vec2::from_angle(angle, Bullet::SPEED)), b, mesh));
                         }
                     }
                 });

@@ -7,9 +7,7 @@ use std::time::{Duration, Instant};
 
 mod vec2;
 use vec2::Vec2;
-
 mod components;
-
 mod systems;
 use systems::*;
 
@@ -21,7 +19,7 @@ struct GameState {
 }
 
 impl GameState {
-    const SHIP_SPAWN_DURATION: Duration = Duration::from_millis(1250);
+    const SHIP_SPAWN_DURATION: Duration = Duration::from_millis(750);
 }
 
 impl GameState {
@@ -47,6 +45,7 @@ impl ggez::event::EventHandler for GameState {
         self.ships_destroyed += handle_collision(ctx, &mut self.world);
 
         if self.bullets_left == 0 && bullets_on_screen(&mut self.world) == 0 {
+            self.quit_event(ctx);
             ggez::quit(ctx);
         }
         
@@ -77,6 +76,7 @@ impl ggez::event::EventHandler for GameState {
 
     fn key_down_event(&mut self, ctx: &mut Context, keycode: KeyCode, _: KeyMods, repeat: bool) {
         if keycode == KeyCode::Escape {
+            self.quit_event(ctx);
             ggez::quit(ctx);
         }
 
@@ -85,13 +85,25 @@ impl ggez::event::EventHandler for GameState {
             self.bullets_left -= 1;
         }
     }
+
+    fn quit_event(&mut self, _ctx: &mut Context) -> bool {
+        println!("You destroyed {} ships!", self.ships_destroyed);
+        false
+    }
 }
 
 fn main() {
     let (mut ctx, mut events_loop) = ggez::ContextBuilder::new("fundies 2 game", "Noah Graff")
-        .window_setup(ggez::conf::WindowSetup::default().title("Fundies 2 Game"))
+        .window_setup(
+            ggez::conf::WindowSetup::default()
+                .title("Fundies 2 Game")
+        )
+        .window_mode(
+            ggez::conf::WindowMode::default()
+                .dimensions(1000.0, 600.0)
+        )
         .build()
-        .expect("could not create ctx");
+        .expect("could not initialize ggez");
 
     ggez::event::run(&mut ctx, &mut events_loop, &mut GameState::new(10))
         .expect("exited with error");
