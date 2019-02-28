@@ -2,7 +2,7 @@ use crate::vec2::Vec2;
 use crate::components::*;
 use pyro::{All, Read, Write};
 use ggez::Context;
-use ggez::graphics::{self, Color};
+use ggez::graphics::{self, DrawMode, FillOptions, Color};
 
 pub fn shoot_bullet(ctx: &mut Context, world: &mut pyro::World) {
     let screen_rect = graphics::screen_coordinates(ctx);
@@ -10,7 +10,7 @@ pub fn shoot_bullet(ctx: &mut Context, world: &mut pyro::World) {
     let vel = Vel(Vec2::new(0.0, -Bullet::SPEED));
     let mesh = graphics::Mesh::new_circle(
         ctx,
-        graphics::DrawMode::Fill,
+        DrawMode::Fill(FillOptions::DEFAULT),
         Vec2::new(0.0, 0.0),
         1.0,
         0.0,
@@ -69,7 +69,7 @@ pub fn handle_collision(ctx: &mut Context, world: &mut pyro::World) -> u32 {
                             let b = Bullet(to_spawn);
                             let mesh = graphics::Mesh::new_circle(
                                 ctx,
-                                graphics::DrawMode::Fill,
+                                DrawMode::Fill(FillOptions::DEFAULT),
                                 Vec2::new(0.0, 0.0),
                                 b.size(),
                                 0.1,
@@ -111,7 +111,7 @@ pub fn spawn_ships(ctx: &mut Context, world: &mut pyro::World) {
     let count = rng.gen_range(0, 5) + 1;
     let mesh = graphics::Mesh::new_circle(
         ctx,
-        graphics::DrawMode::Fill,
+        DrawMode::Fill(FillOptions::DEFAULT),
         Vec2::new(0.0, 0.0),
         Ship::size(ctx),
         0.1,
