@@ -92,6 +92,7 @@ impl ggez::event::EventHandler for GameState {
     }
 }
 
+// test comment
 fn main() {
     let (mut ctx, mut events_loop) = ggez::ContextBuilder::new("fundies 2 game", "Noah Graff")
         .window_setup(
